@@ -3,22 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>        {
-          day: 2,
-          title: "Zion (Scenic + Easy)",
-          location: "Zion Canyon",
-          mapQuery: "Springdale, UT",
-          drive: "Local Shuttle",
-          schedule: [
-            { time: "06:15", text: "Sunrise at Canyon Junction" },
-            { time: "07:00", text: "Scenic Shuttle ride" },
-            { time: "11:00", text: "REST (Avoid July heat)" },
-            { time: "18:00", text: "Sunset: Pa'rus Trail" }
-          ],
-          highlights: "Sunrise peaks, riverside walks, sunset strolls",
-          stay: "Zion Canyon Lodge",
-          prompt: "A peaceful morning view of the Watchman peak in Zion National Park reflecting in the Virgin River"
-        },op - 8-Day Road Trip</title>
+  <title>Utah Mighty 5 Loop - 8-Day Road Trip</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -158,6 +143,7 @@
           ],
           highlights: "Zion–Mt. Carmel Highway, Canyon Overlook Trail",
           stay: "Zion Canyon Lodge",
+          image: "https://www.nationalparked.com/files/jpg/zion/ftr-zion-mt-carmel-highway-0191.jpg",
           prompt: "Cinematic wide shot of Zion National Park's red rock canyon walls and the Virgin River at sunset, dramatic lighting"
         },
     {
@@ -174,6 +160,7 @@
       ],
       highlights: "Sunrise peaks, riverside walks, sunset strolls",
       stay: "Zion Canyon Lodge",
+      image: "https://www.nps.gov/zion/planyourvisit/images/SnowTemples_11092022_04.jpg",
       prompt: "A peaceful morning view of the Watchman peak in Zion National Park reflecting in the Virgin River"
     },
         {
@@ -189,6 +176,7 @@
           ],
           highlights: "Hoodoos, amphitheater views, high altitude cooling",
           stay: "Best Western Plus Bryce Canyon Grand Hotel",
+          image: "https://www.visitutah.com/azure/cmsroot/visitutah/media/site-assets/three-season-photography/mighty-5/bryce-canyon/web2000_brycecanyon_hoodoos_larrycprice.jpg?w=450&h=450&mode=crop&scale=both",
           prompt: "The Bryce Canyon Amphitheater filled with thousands of orange sandstone hoodoos and pine trees"
         },
         {
@@ -204,6 +192,7 @@
           ],
           highlights: "Escalante, Hogback Ridge, Boulder Mountain",
           stay: "Capitol Reef Resort",
+          image: "https://capitolreefcountry.com/wp-content/uploads/elementor/thumbs/ArchCapitolReef-scaled-qpurecvi48kff3uyz3g6u2qbhahunyh4goo968773s.jpg",
           prompt: "A winding scenic road through the rugged white and red rock desert canyons of Grand Staircase-Escalante"
         },
         {
@@ -219,6 +208,7 @@
           ],
           highlights: "Waterpocket Fold, Cathedral Valley views, Moab transition",
           stay: "Hyatt Place Moab",
+          image: "https://images.ctfassets.net/0wjmk6wgfops/1DVLT3AB71ITNuwRww6egZ/8dcc7a1255a5ddb7c0f89abba434ee0f/Waterpocket_Fold.jpg",
           prompt: "The dramatic red rock cliffs and fruit orchards of Fruita in Capitol Reef National Park"
         },
         {
@@ -235,6 +225,7 @@
           ],
           highlights: "Delicate Arch, Double Arch, Park Avenue",
           stay: "Hyatt Place Moab",
+          image: "https://res.cloudinary.com/simpleview/image/upload/v1742321957/clients/grandcountyut/Winter_Sunset_at_Delicate_Arch_1_2_014c6d67-6823-4fcf-935e-c54ed5a9b61d.jpg",
           prompt: "Delicate Arch in Arches National Park glowing orange during a dramatic sunset with a vast desert backdrop"
         },
         {
@@ -251,6 +242,7 @@
           ],
           highlights: "Forrest Gump Point, Tribal Park Loop, Starry Skies",
           stay: "The View Hotel (Crucial Booking)",
+          image: "https://www.travelinusa.us/wp-content/uploads/sites/3/2019/11/forrest-gump-point.webp",
           prompt: "The iconic sandstone buttes of Monument Valley under a clear starry desert sky"
         },
         {
@@ -267,6 +259,7 @@
           ],
           highlights: "Mesa Arch, Grand View Point, Dead Horse Point",
           stay: "Return Flight",
+          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzOomhNARWqYto-n0dND--TYbfRuLpJ9j12Q&s",
           prompt: "Mesa Arch in Canyonlands National Park framing a vast canyon vista at sunrise"
         }
       ];
@@ -419,7 +412,13 @@
               {/* Day Visual Media */}
               <div className="lg:w-2/3 w-full">
                 <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[16/10] bg-stone-200 group ring-1 ring-stone-200">
-                  {loadingImages[item.day] ? (
+                  {item.image ? (
+                    <img 
+                      src={item.image} 
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                      alt={item.location} 
+                    />
+                  ) : loadingImages[item.day] ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-50">
                       <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
                       <span className="text-stone-400 text-xs font-bold tracking-widest uppercase">Capturing Landscape...</span>
