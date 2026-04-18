@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Epic Road Trips - Scenic Adventure Collection</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .gradient-overlay {
+      background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState } = React;
+    
+    // SVG Icon Components
+    const MapIcon = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+        <line x1="8" y1="2" x2="8" y2="18"></line>
+        <line x1="16" y1="6" x2="16" y2="22"></line>
+      </svg>
+    );
+    
+    const Calendar = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    );
+    
+    const Navigation = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+      </svg>
+    );
+    
+    const Clock = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+    );
+    
+    const Mountain = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="m8 3 4 8 5-5 5 15H2L8 3z"></path>
+      </svg>
+    );
+    
+    const ArrowRight = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    );
+    
+    const Star = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+    );
+    
+    const Menu = ({ size = 24, className = '' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    );
+
+    const App = () => {
+      const [activeFilter, setActiveFilter] = useState('all');
+      
+      // Your road trip collection
+      const roadTrips = [
+        {
+          id: 1,
+          title: "Appalachian Run",
+          subtitle: "Mountains & Valleys Odyssey",
+          region: "Eastern USA",
+          duration: "7 Days",
+          distance: "1,800 Miles",
+          dates: "Apr 23 - Apr 29, 2026",
+          highlights: ["Blue Ridge Parkway", "Great Smoky Mountains", "Shenandoah Valley", "New River Gorge"],
+          image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
+          gradient: "from-emerald-600 to-teal-700",
+          status: "upcoming",
+          link: "Appalachian_Run.html"
+        },
+        {
+          id: 2,
+          title: "Pacific Coast Highway",
+          subtitle: "California Coastal Dream",
+          region: "West Coast",
+          duration: "10 Days",
+          distance: "1,200 Miles",
+          dates: "Coming Summer 2026",
+          highlights: ["Big Sur", "Highway 1", "Redwood Forest", "San Francisco"],
+          image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80",
+          gradient: "from-blue-600 to-cyan-600",
+          status: "planned",
+          link: "#"
+        },
+        {
+          id: 3,
+          title: "Southwest Desert Loop",
+          subtitle: "Canyons & Red Rocks",
+          region: "Southwest USA",
+          duration: "12 Days",
+          distance: "2,400 Miles",
+          dates: "Fall 2026",
+          highlights: ["Grand Canyon", "Monument Valley", "Zion", "Bryce Canyon"],
+          image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80",
+          gradient: "from-orange-600 to-red-700",
+          status: "planned",
+          link: "#"
+        },
+        {
+          id: 4,
+          title: "Great Lakes Circuit",
+          subtitle: "Freshwater Shores Adventure",
+          region: "Midwest USA",
+          duration: "14 Days",
+          distance: "2,800 Miles",
+          dates: "Summer 2027",
+          highlights: ["Lake Superior", "Sleeping Bear Dunes", "Mackinac Island", "Door County"],
+          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+          gradient: "from-indigo-600 to-blue-700",
+          status: "idea",
+          link: "#"
+        },
+        {
+          id: 5,
+          title: "New England Fall Foliage",
+          subtitle: "Autumn Colors Journey",
+          region: "Northeast USA",
+          duration: "8 Days",
+          distance: "1,500 Miles",
+          dates: "October 2026",
+          highlights: ["White Mountains", "Green Mountains", "Acadia", "Berkshires"],
+          image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80",
+          gradient: "from-amber-600 to-orange-700",
+          status: "planned",
+          link: "#"
+        },
+        {
+          id: 6,
+          title: "Canadian Rockies Explorer",
+          subtitle: "Alpine Paradise Trek",
+          region: "Western Canada",
+          duration: "10 Days",
+          distance: "1,600 Miles",
+          dates: "Summer 2027",
+          highlights: ["Banff", "Jasper", "Icefields Parkway", "Lake Louise"],
+          image: "https://images.unsplash.com/photo-1513026705753-bc3fffca8bf4?auto=format&fit=crop&w=1200&q=80",
+          gradient: "from-slate-600 to-gray-700",
+          status: "idea",
+          link: "#"
+        }
+      ];
+      
+      const filters = [
+        { id: 'all', label: 'All Trips', count: roadTrips.length },
+        { id: 'upcoming', label: 'Upcoming', count: roadTrips.filter(t => t.status === 'upcoming').length },
+        { id: 'planned', label: 'Planned', count: roadTrips.filter(t => t.status === 'planned').length },
+        { id: 'idea', label: 'Ideas', count: roadTrips.filter(t => t.status === 'idea').length }
+      ];
+      
+      const filteredTrips = activeFilter === 'all' 
+        ? roadTrips 
+        : roadTrips.filter(trip => trip.status === activeFilter);
+      
+      const statusBadge = (status) => {
+        const styles = {
+          upcoming: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
+          planned: 'bg-blue-500/20 text-blue-300 border-blue-500/50',
+          idea: 'bg-purple-500/20 text-purple-300 border-purple-500/50'
+        };
+        const labels = {
+          upcoming: 'Upcoming Trip',
+          planned: 'In Planning',
+          idea: 'Future Idea'
+        };
+        return (
+          <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${styles[status]}`}>
+            {labels[status]}
+          </span>
+        );
+      };
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-white">
+          {/* Hero Header */}
+          <header className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950 z-10"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80" 
+                className="w-full h-full object-cover opacity-40"
+                alt="Road through mountains"
+              />
+            </div>
+            
+            <div className="relative z-20 text-center px-6 max-w-5xl">
+              <div className="mb-8 float-animation">
+                <div className="inline-block p-6 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10">
+                  <Navigation size={64} className="text-orange-400" />
+                </div>
+              </div>
+              
+              <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight">
+                <span className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent">
+                  Epic Road Trips
+                </span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-slate-300 font-medium mb-4">
+                Curated Scenic Adventures Across America
+              </p>
+              
+              <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-slate-400 font-bold">
+                <div className="flex items-center gap-2">
+                  <MapIcon size={20} className="text-orange-400" />
+                  <span>{roadTrips.length} Unique Routes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mountain size={20} className="text-orange-400" />
+                  <span>Scenic Destinations</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star size={20} className="text-orange-400" />
+                  <span>Adventure Awaits</span>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Filter Section */}
+          <section className="max-w-7xl mx-auto px-6 -mt-8 relative z-30">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
+              <div className="flex flex-wrap gap-3 justify-center">
+                {filters.map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setActiveFilter(filter.id)}
+                    className={`px-6 py-3 rounded-2xl font-black text-sm uppercase tracking-wider transition-all ${
+                      activeFilter === filter.id
+                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg scale-105'
+                        : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
+                    }`}
+                  >
+                    {filter.label}
+                    <span className="ml-2 opacity-60">({filter.count})</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Road Trips Grid */}
+          <main className="max-w-7xl mx-auto px-6 py-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredTrips.map((trip, index) => (
+                <a
+                  key={trip.id}
+                  href={trip.link}
+                  className="group block bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-[2.5rem] overflow-hidden hover:border-orange-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  {/* Trip Image */}
+                  <div className="relative h-64 overflow-hidden">
+                    <img 
+                      src={trip.image} 
+                      alt={trip.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t ${trip.gradient} opacity-60 group-hover:opacity-40 transition-opacity`}></div>
+                    
+                    <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
+                      {statusBadge(trip.status)}
+                      <div className="bg-black/40 backdrop-blur-md px-3 py-2 rounded-xl">
+                        <Calendar size={18} />
+                      </div>
+                    </div>
+                    
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <h3 className="text-2xl font-black mb-1">{trip.title}</h3>
+                      <p className="text-sm text-slate-200 font-bold">{trip.subtitle}</p>
+                    </div>
+                  </div>
+
+                  {/* Trip Details */}
+                  <div className="p-6">
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+                        <div className="flex items-center gap-2 text-orange-400 mb-2">
+                          <Clock size={16} />
+                          <span className="text-xs font-black uppercase tracking-wider">Duration</span>
+                        </div>
+                        <p className="text-lg font-black">{trip.duration}</p>
+                      </div>
+                      
+                      <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+                        <div className="flex items-center gap-2 text-orange-400 mb-2">
+                          <Navigation size={16} />
+                          <span className="text-xs font-black uppercase tracking-wider">Distance</span>
+                        </div>
+                        <p className="text-lg font-black">{trip.distance}</p>
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <div className="flex items-center gap-2 text-slate-400 text-xs font-black uppercase tracking-wider mb-3">
+                        <MapIcon size={14} />
+                        <span>Key Highlights</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {trip.highlights.slice(0, 3).map((highlight, idx) => (
+                          <span key={idx} className="bg-white/5 px-3 py-1 rounded-full text-xs font-bold text-slate-300">
+                            {highlight}
+                          </span>
+                        ))}
+                        {trip.highlights.length > 3 && (
+                          <span className="bg-white/5 px-3 py-1 rounded-full text-xs font-bold text-orange-400">
+                            +{trip.highlights.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                      <div className="text-sm">
+                        <p className="text-slate-400 font-bold">{trip.region}</p>
+                        <p className="text-xs text-slate-500 font-bold">{trip.dates}</p>
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <ArrowRight size={20} />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            {filteredTrips.length === 0 && (
+              <div className="text-center py-20">
+                <div className="mb-6">
+                  <MapIcon size={64} className="text-slate-700 mx-auto" />
+                </div>
+                <h3 className="text-2xl font-black text-slate-400 mb-2">No trips found</h3>
+                <p className="text-slate-500">Try selecting a different filter</p>
+              </div>
+            )}
+          </main>
+
+          {/* Footer Stats */}
+          <section className="max-w-7xl mx-auto px-6 py-16">
+            <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-[3rem] p-12 text-center">
+              <h2 className="text-4xl md:text-5xl font-black mb-6">Ready to Hit the Road?</h2>
+              <p className="text-xl text-white/90 font-medium mb-8 max-w-2xl mx-auto">
+                Each trip is meticulously planned with scenic routes, iconic landmarks, 
+                and unforgettable experiences. Your next adventure starts here.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                  <div className="text-5xl font-black mb-2">
+                    {roadTrips.reduce((sum, trip) => sum + parseInt(trip.distance.replace(/[^0-9]/g, '')), 0).toLocaleString()}+
+                  </div>
+                  <div className="text-sm font-black uppercase tracking-wider opacity-90">Total Miles Planned</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                  <div className="text-5xl font-black mb-2">
+                    {roadTrips.reduce((sum, trip) => sum + parseInt(trip.duration), 0)}+
+                  </div>
+                  <div className="text-sm font-black uppercase tracking-wider opacity-90">Days of Adventure</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                  <div className="text-5xl font-black mb-2">∞</div>
+                  <div className="text-sm font-black uppercase tracking-wider opacity-90">Memories to Make</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="border-t border-white/10 py-12">
+            <div className="max-w-7xl mx-auto px-6 text-center">
+              <div className="flex justify-center gap-6 mb-6">
+                <div className="w-12 h-px bg-slate-700 self-center"></div>
+                <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-sm">
+                  Epic Road Trips Collection
+                </p>
+                <div className="w-12 h-px bg-slate-700 self-center"></div>
+              </div>
+              <p className="text-slate-600 text-sm">
+                © 2026 Adventure Dashboard • Explore. Drive. Discover.
+              </p>
+            </div>
+          </footer>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
