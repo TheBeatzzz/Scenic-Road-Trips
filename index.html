@@ -104,12 +104,12 @@
           region: "Eastern USA",
           duration: "7 Days",
           distance: "1,800 Miles",
-          dates: "Apr 23 - Apr 29, 2026",
+          dates: "Apr 2026",
           highlights: ["Blue Ridge Parkway", "Great Smoky Mountains", "Shenandoah Valley", "New River Gorge"],
           image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
           gradient: "from-emerald-600 to-teal-700",
           status: "upcoming",
-          link: "../Appalachian_Run.html"
+          link: "Appalachian_Run.html"
         },
         {
           id: 2,
@@ -132,27 +132,14 @@
           region: "West Coast",
           duration: "10 Days",
           distance: "1,200 Miles",
-          dates: "Coming Summer 2026",
+          dates: "Coming 20XX",
           highlights: ["Big Sur", "Highway 1", "Redwood Forest", "San Francisco"],
           image: "https://images.unsplash.com/photo-1502175353174-a7a70e73b362?auto=format&fit=crop&w=1200&q=80",
           gradient: "from-blue-600 to-cyan-600",
           status: "planned",
           link: "#"
         },
-        {
-          id: 3,
-          title: "Pacific Coast Highway",
-          subtitle: "California Coastal Dream",
-          region: "West Coast",
-          duration: "10 Days",
-          distance: "1,200 Miles",
-          dates: "Coming Summer 2026",
-          highlights: ["Big Sur", "Highway 1", "Redwood Forest", "San Francisco"],
-          image: "https://images.unsplash.com/photo-1502175353174-a7a70e73b362?auto=format&fit=crop&w=1200&q=80",
-          gradient: "from-blue-600 to-cyan-600",
-          status: "planned",
-          link: "#"
-        },
+        
         {
           id: 4,
           title: "Southwest Desert Loop",
@@ -160,7 +147,7 @@
           region: "Southwest USA",
           duration: "12 Days",
           distance: "2,400 Miles",
-          dates: "Fall 2026",
+          dates: "Coming 20XX",
           highlights: ["Grand Canyon", "Sedona", "Antelope Canyon", "Page"],
           image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80",
           gradient: "from-red-600 to-orange-700",
@@ -183,13 +170,13 @@
         },
         {
           id: 6,
-          title: "New England Fall Foliage",
-          subtitle: "Autumn Colors Journey",
+          title: "Acadia National Park",
+          subtitle: "Coastal Maine Escape",
           region: "Northeast USA",
-          duration: "8 Days",
-          distance: "1,500 Miles",
+          duration: "4 Days",
+          distance: "600 Miles",
           dates: "October 2026",
-          highlights: ["White Mountains", "Green Mountains", "Acadia", "Berkshires"],
+          highlights: ["Acadia National Park", "Bar Harbor", "Cadillac Mountain", "Ocean Drive"],
           image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80",
           gradient: "from-amber-600 to-orange-700",
           status: "planned",
@@ -202,17 +189,18 @@
           region: "Western Canada",
           duration: "10 Days",
           distance: "1,600 Miles",
-          dates: "Summer 2027",
+          dates: "Completed 2023",
           highlights: ["Banff", "Jasper", "Icefields Parkway", "Lake Louise"],
           image: "https://images.unsplash.com/photo-1513026705753-bc3fffca8bf4?auto=format&fit=crop&w=1200&q=80",
           gradient: "from-slate-600 to-gray-700",
-          status: "idea",
+          status: "finished",
           link: "#"
         }
       ];
       
       const filters = [
         { id: 'all', label: 'All Trips', count: roadTrips.length },
+        { id: 'finished', label: 'Finished', count: roadTrips.filter(t => t.status === 'finished').length },
         { id: 'upcoming', label: 'Upcoming', count: roadTrips.filter(t => t.status === 'upcoming').length },
         { id: 'planned', label: 'Planned', count: roadTrips.filter(t => t.status === 'planned').length },
         { id: 'idea', label: 'Ideas', count: roadTrips.filter(t => t.status === 'idea').length }
@@ -224,11 +212,13 @@
       
       const statusBadge = (status) => {
         const styles = {
+          finished: 'bg-amber-500/20 text-amber-300 border-amber-500/50',
           upcoming: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50',
           planned: 'bg-blue-500/20 text-blue-300 border-blue-500/50',
           idea: 'bg-purple-500/20 text-purple-300 border-purple-500/50'
         };
         const labels = {
+          finished: 'Completed ✓',
           upcoming: 'Upcoming Trip',
           planned: 'In Planning',
           idea: 'Future Idea'
