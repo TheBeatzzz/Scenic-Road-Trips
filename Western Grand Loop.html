@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Western Grand Loop – 2026 Itinerary</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; background: #f8fafc; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    const LucideIcon = ({ name, className }) => {
+      const ref = useRef(null);
+      useEffect(() => {
+        if (!ref.current || !lucide[name]) return;
+        ref.current.innerHTML = '';
+        const svg = lucide.createElement(lucide[name]);
+        if (className) svg.setAttribute('class', className);
+        ref.current.appendChild(svg);
+      });
+      return <span ref={ref} style={{ display: 'contents' }} />;
+    };
+
+    const ITINERARY_DATA = [
+      { day:1, date:"July 11", title:"SLC & Wasatch Introduction", location:"Salt Lake City → Provo", route:"Lehi → Little Cottonwood Canyon → Big Cottonwood → Provo", mapUrl:"https://www.google.com/maps/dir/Lehi,+UT/Little+Cottonwood+Canyon,+Sandy,+UT/Big+Cottonwood+Canyon,+UT/Provo,+UT", highlights:["Little Cottonwood Canyon","Bridal Veil Falls","Utah Lake Sunset"], focus:"Recovery & Relaxed Scenery", drive:"1.5 hrs", lodging:{name:"La Quinta Inn & Suites Provo", type:"Budget Hotel", est:"$80–$100/night", note:"Good base near I-15; free breakfast included"}, schedule:[{time:"8:00-9:00 AM",activity:"Breakfast & Relaxed Start",icon:"Utensils"},{time:"9:00-11:00 AM",activity:"Little Cottonwood Canyon (Granite cliffs & alpine forests)",icon:"Mountain"},{time:"11:00-12:30 PM",activity:"Drive Toward Provo via I-15 South",icon:"Car"},{time:"12:30-2:00 PM",activity:"Lunch in Provo",icon:"Utensils"},{time:"2:00-Evening",activity:"Option A: Provo Canyon (Bridal Veil Falls) or Option B: Utah Lake",icon:"Camera"}], tips:"This day is intentionally low stress to recover from late flight arrival." },
+      { day:2, date:"July 12", title:"Into the Red Rock", location:"Provo → Capitol Reef", route:"Provo → US-6 East → I-70 East → UT-24 → Capitol Reef", mapUrl:"https://www.google.com/maps/dir/Provo,+UT/Price,+UT/Goblin+Valley+State+Park,+UT/Capitol+Reef+National+Park,+UT", highlights:["Scenic UT-6","Goblin Valley State Park","Capitol Reef Scenic Drive"], focus:"Transition to Desert", drive:"4.5-5 hrs", lodging:{name:"Torrey Trading Post Cabins", type:"Budget Cabins", est:"$90–$110/night", note:"Cozy log cabins in Torrey, just minutes from Capitol Reef. Book ahead—fills up fast in summer"}, schedule:[{time:"7:00-8:00 AM",activity:"Breakfast & Departure (Fuel up & Stock supplies)",icon:"Utensils"},{time:"8:00-10:00 AM",activity:"US-6 East: Mountain canyons & dry valleys",icon:"Car"},{time:"10:00-11:30 AM",activity:"Scenic I-70 Section (Dramatic cliffs & colorful canyons)",icon:"Navigation"},{time:"11:30-1:30 PM",activity:"Goblin Valley State Park (Unique hoodoo landscape)",icon:"Camera"},{time:"1:30-3:00 PM",activity:"Scenic UT-24 Drive toward Fruita",icon:"Sun"},{time:"3:00-6:30 PM",activity:"Capitol Reef NP: Fruita District & Scenic Drive",icon:"Mountain"}], tips:"Capitol Reef is much less crowded than Zion/Bryce; enjoy the authentic atmosphere." },
+      { day:3, date:"July 13", title:"The All-American Road", location:"Torrey → Bryce Canyon", route:"Torrey → UT-12 → Escalante → Bryce Canyon", mapUrl:"https://www.google.com/maps/dir/Torrey,+UT/Escalante,+UT/Bryce+Canyon+National+Park,+UT", highlights:["Boulder Mountain","The Hogsback","Bryce Point Sunset"], focus:"Scenic Driving", drive:"4 hrs", lodging:{name:"Bryce Valley Inn", type:"Budget Hotel", est:"$100–$120/night", note:"Just outside the park entrance; clean rooms, free Wi-Fi, close to shuttle stops"}, schedule:[{time:"6:30-7:30 AM",activity:"Sunrise at Panorama Point or Fruita",icon:"Sunrise"},{time:"8:30-10:30 AM",activity:"Boulder Mountain Section (Alpine forests & overlooks)",icon:"Mountain"},{time:"10:30-12:00 PM",activity:"Boulder & Escalante Area (Increasingly dramatic)",icon:"Camera"},{time:"12:00-1:30 PM",activity:"The Hogsback Drive (Narrow ridge with steep drops)",icon:"Car"},{time:"1:30-3:00 PM",activity:"Calf Creek & Red Canyon pullouts",icon:"Navigation"},{time:"3:00-Sunset",activity:"Bryce Canyon: Sunset Point to Sunrise Point Rim Walk",icon:"Sun"}], tips:"Utah Scenic Byway 12 is often ranked among the top 10 scenic drives in the world." },
+      { day:4, date:"July 14", title:"Canyons & Tunnels", location:"Bryce → Zion", route:"Bryce → Red Canyon → US-89 → Zion East Entrance → Mt Carmel Tunnel → Springdale", mapUrl:"https://www.google.com/maps/dir/Bryce+Canyon+National+Park,+UT/Red+Canyon+Visitor+Center,+UT/Springdale,+UT", highlights:["Bryce Sunrise","Zion-Mt Carmel Tunnel","Checkerboard Mesa"], focus:"Massive Geology", drive:"3 hrs", lodging:{name:"Bumbleberry Inn, Springdale", type:"Budget Hotel", est:"$110–$130/night", note:"Walkable to Zion shuttle stop; friendly staff and good value for the Zion area"}, schedule:[{time:"5:45-7:30 AM",activity:"Bryce Sunrise at Sunrise or Bryce Point",icon:"Sunrise"},{time:"8:30-10:00 AM",activity:"Red Canyon Scenic Area (Tunnel photography)",icon:"Camera"},{time:"10:00-12:00 PM",activity:"US-89 South drive toward Zion East Entrance",icon:"Car"},{time:"12:00-3:00 PM",activity:"Zion East Side: Checkerboard Mesa & Tunnel Drive",icon:"Navigation"},{time:"3:00-5:00 PM",activity:"Check-in Springdale & relax",icon:"Clock"},{time:"5:00-8:00 PM",activity:"Zion Sunset: Pa'rus Trail or Canyon Junction Bridge",icon:"Sun"}], tips:"The Pa'rus trail is the best place to watch 'The Watchman' glow at sunset." },
+      { day:5, date:"July 15", title:"The Zion Experience", location:"Zion → Page, AZ", route:"Springdale → Zion Canyon → Kanab → Page", mapUrl:"https://www.google.com/maps/dir/Springdale,+UT/Zion+National+Park,+UT/Kanab,+UT/Page,+AZ", highlights:["Riverside Walk","Temple of Sinawava","Evening Desert Drive"], focus:"Deep Canyon Exploration", drive:"2.5 hrs", lodging:{name:"Motel 6 Page, AZ", type:"Budget Motel", est:"$70–$90/night", note:"Clean, affordable base near Horseshoe Bend & Antelope Canyon. Book early!"}, schedule:[{time:"5:45-6:30 AM",activity:"Early Sunrise Session (Avoid midday heat)",icon:"Sunrise"},{time:"7:30-11:00 AM",activity:"Zion Shuttle to Temple of Sinawava & Riverside Walk",icon:"Mountain"},{time:"11:00-12:30 PM",activity:"Scenic Shuttle stops (Big Bend, Court of Patriarchs)",icon:"Camera"},{time:"12:30-2:00 PM",activity:"Lunch & Midday rest in Springdale",icon:"Utensils"},{time:"2:00-4:30 PM",activity:"Final drive through Zion East side",icon:"Navigation"},{time:"5:30-8:00 PM",activity:"Evening drive to Page, AZ",icon:"Car"}], tips:"Starting EARLY in Zion is non-negotiable in July to avoid the heat and shuttle crowds." },
+      { day:6, date:"July 16", title:"Southwest Icons", location:"Page → Monument Valley → Moab", route:"Page → Horseshoe Bend → Monument Valley → Forrest Gump Point → Moab", mapUrl:"https://www.google.com/maps/dir/Page,+AZ/Horseshoe+Bend,+AZ/Monument+Valley,+AZ/US-163+Scenic+Byway,+Mexican+Hat,+UT/Moab,+UT", highlights:["Horseshoe Bend","Monument Valley","Forrest Gump Point"], focus:"Cinematic Landscapes", drive:"6.5-7 hrs", lodging:{name:"Moab Hostel", type:"Hostel / Budget Inn", est:"$35–$45/bunk, $90/private", note:"Central Moab location; great for meeting other travelers. Alt: Arcadian Hotel ~$100"}, schedule:[{time:"5:30-7:00 AM",activity:"Horseshoe Bend Sunrise (20-30 min walk)",icon:"Sunrise"},{time:"8:00-10:30 AM",activity:"Antelope Canyon Tour (Reservations Essential)",icon:"Camera"},{time:"10:30-1:30 PM",activity:"Drive to Monument Valley via Kayenta",icon:"Car"},{time:"1:30-4:00 PM",activity:"Monument Valley Exploration & Visitor Center",icon:"Mountain"},{time:"4:00-4:30 PM",activity:"Forrest Gump Point (US-163 iconic view)",icon:"Camera"},{time:"4:30-7:30 PM",activity:"Drive to Moab via Mexican Hat & Bluff",icon:"Navigation"}], tips:"This is a long driving day; keep activity moderate in the midday heat." },
+      { day:7, date:"July 17", title:"The Arches Loop", location:"Arches NP / Moab", route:"Moab → Arches NP Loop → Dead Horse Point State Park → Moab", mapUrl:"https://www.google.com/maps/dir/Moab,+UT/Arches+National+Park,+UT/Dead+Horse+Point+State+Park,+UT/Moab,+UT", highlights:["Windows Section","Double Arch","Dead Horse Point Sunset"], focus:"Iconic Arches", drive:"Local", lodging:{name:"Moab Valley RV Resort (cabin)", type:"Budget Cabin", est:"$75–$95/night", note:"2nd night in Moab; on-site pool—a lifesaver in July heat! Alt: Arcadian Hotel ~$100"}, schedule:[{time:"5:45-7:30 AM",activity:"Sunrise at Park Avenue or Balanced Rock",icon:"Sunrise"},{time:"7:30-9:00 AM",activity:"Windows Section & Double Arch (Easy walking)",icon:"Mountain"},{time:"9:00-11:00 AM",activity:"Delicate Arch Viewpoint (Lower effort than hike)",icon:"Camera"},{time:"11:00-1:00 PM",activity:"Midday recovery break in Moab",icon:"Utensils"},{time:"1:00-4:00 PM",activity:"Option: Dead Horse Point State Park for views",icon:"Navigation"},{time:"4:00-7:30 PM",activity:"Sunset at Green River Overlook or Dead Horse",icon:"Sun"}], tips:"Arches is very exposed; return to Moab for air conditioning during the 1-4 PM window." },
+      { day:8, date:"July 18", title:"The Long Northward Push", location:"Moab → Grand Teton", route:"Moab → US-191 → US-40 → Flaming Gorge → US-191 → Jackson → Moran", mapUrl:"https://www.google.com/maps/dir/Moab,+UT/Flaming+Gorge+National+Recreation+Area,+UT/Moran,+WY", highlights:["Flaming Gorge","Red Canyon Overlook","First Teton View"], focus:"Landscape Transition", drive:"8-9 hrs", lodging:{name:"Colter Bay Village Cabins (Grand Teton NP)", type:"NPS Cabin", est:"$80–$100/night", note:"Rustic canvas-and-log cabins inside the park; share bathhouses. Book recreation.gov early"}, schedule:[{time:"6:00-7:00 AM",activity:"Early Departure to avoid desert heat",icon:"Car"},{time:"7:00-10:00 AM",activity:"Drive Moab to Vernal via US-191",icon:"Navigation"},{time:"10:00-1:00 PM",activity:"Flaming Gorge (Red Canyon Overlook & Dam)",icon:"Camera"},{time:"1:00-2:00 PM",activity:"Lunch in Green River or Rock Springs",icon:"Utensils"},{time:"2:00-6:30 PM",activity:"Wyoming scenic drive through high ranchlands",icon:"Car"},{time:"6:30-8:30 PM",activity:"Evening Arrival: Oxbow Bend or Snake River Overlook",icon:"Mountain"}], tips:"The Flaming Gorge route is far more scenic than the I-15 highway alternative." },
+      { day:9, date:"July 19", title:"Teton Peaks & Lakes", location:"Grand Teton NP", route:"Moran → Oxbow Bend → Jenny Lake → Mormon Row → Moran", mapUrl:"https://www.google.com/maps/dir/Moran,+WY/Oxbow+Bend,+WY/Jenny+Lake,+WY/Mormon+Row+Historic+District,+WY/Moran,+WY", highlights:["Oxbow Bend Sunrise","Jenny Lake Boat","Mormon Row"], focus:"Alpine Serenity", drive:"Local", lodging:{name:"Anvil Motel, Jackson WY", type:"Budget Motel", est:"$100–$120/night", note:"One of the most affordable motels in Jackson; walking distance to the town square"}, schedule:[{time:"5:30-7:00 AM",activity:"Sunrise at Oxbow Bend (Moose/Elk sightings)",icon:"Sunrise"},{time:"8:00-11:30 AM",activity:"Jenny Lake Boat Shuttle & Hidden Falls walk",icon:"Mountain"},{time:"11:30-1:00 PM",activity:"Teton Park Road Scenic Drive & Lunch",icon:"Navigation"},{time:"1:00-4:00 PM",activity:"Mormon Row & Snake River Overlook",icon:"Camera"},{time:"4:00-6:00 PM",activity:"Relax in Jackson or at hotel",icon:"Clock"},{time:"6:00-8:30 PM",activity:"Sunset Wildlife Session at Schwabacher Landing",icon:"CloudSun"}], tips:"Wildlife is most active at Schwabacher Landing and Oxbow Bend at dawn/dusk." },
+      { day:10, date:"July 20", title:"Geothermal Wonders", location:"Tetons → Yellowstone", route:"Moran → South Entrance → West Thumb → Old Faithful → Grand Prismatic → Canyon", mapUrl:"https://www.google.com/maps/dir/Moran,+WY/West+Thumb+Geyser+Basin,+WY/Old+Faithful,+WY/Grand+Prismatic+Spring,+WY/Canyon+Village,+WY", highlights:["West Thumb Geysers","Old Faithful","Grand Prismatic"], focus:"Volcanic Activity", drive:"3.5 hrs", lodging:{name:"Yellowstone Valley Lodge, Gardiner MT", type:"Budget Hotel", est:"$90–$115/night", note:"Just outside Yellowstone's north gate; much cheaper than in-park lodges ($200+)"}, schedule:[{time:"7:00-8:00 AM",activity:"Breakfast & Departure from Tetons",icon:"Utensils"},{time:"8:00-10:00 AM",activity:"Drive into Yellowstone South Entrance",icon:"Car"},{time:"10:00-11:00 AM",activity:"West Thumb Geyser Basin (Lakeside geysers)",icon:"Mountain"},{time:"11:00-1:30 PM",activity:"Old Faithful eruption & Upper Geyser Basin",icon:"Clock"},{time:"1:30-3:00 PM",activity:"Grand Prismatic Spring Boardwalk/Overlook",icon:"Camera"},{time:"5:00-7:30 PM",activity:"Hayden Valley evening wildlife drive",icon:"CloudSun"}], tips:"Traffic jams caused by bison can add 1-2 hours to any Yellowstone drive time." },
+      { day:11, date:"July 21", title:"The Serengeti of America", location:"Lamar Valley / Canyon", route:"Canyon Village → Lamar Valley → Canyon Village", mapUrl:"https://www.google.com/maps/dir/Canyon+Village,+WY/Lamar+Valley,+WY/Canyon+Village,+WY", highlights:["Lamar Valley Wildlife","Grand Canyon of Yellowstone","Artist Point"], focus:"Wildlife & Waterfalls", drive:"Local", lodging:{name:"Cooke City Motel", type:"Budget Motel", est:"$75–$95/night", note:"Small frontier town right at Beartooth entrance. Book early—very limited rooms!"}, schedule:[{time:"5:15-8:00 AM",activity:"Lamar Valley Wildlife (Wolves/Bears possible)",icon:"Sunrise"},{time:"8:00-9:00 AM",activity:"Scenic drive through northern Yellowstone",icon:"Navigation"},{time:"9:00-12:00 PM",activity:"Grand Canyon of the Yellowstone (Artist Point)",icon:"Mountain"},{time:"12:00-1:00 PM",activity:"Lunch at Canyon Village",icon:"Utensils"},{time:"1:00-3:30 PM",activity:"Flexible Time: Mammoth Hot Springs or relax",icon:"Clock"},{time:"3:30-8:00 PM",activity:"Reposition to Cooke City for Beartooth start",icon:"Car"}], tips:"Bring binoculars! Lamar Valley is the best place in the lower 48 to see wolves." },
+      { day:12, date:"July 22", title:"Top of the World", location:"Cooke City → Red Lodge", route:"Cooke City → Beartooth Pass → Red Lodge", mapUrl:"https://www.google.com/maps/dir/Cooke+City,+MT/Beartooth+Pass,+WY/Red+Lodge,+MT", highlights:["Beartooth Highway","Alpine Tundra","Red Lodge Town"], focus:"High Altitude Driving", drive:"3 hrs", lodging:{name:"Yodeler Motel, Red Lodge", type:"Budget Motel", est:"$80–$105/night", note:"Classic mountain-town motel, walkable to restaurants. Cozy and well-reviewed"}, schedule:[{time:"5:30-7:00 AM",activity:"Optional final Lamar Valley Sunrise",icon:"Sunrise"},{time:"8:00-12:30 PM",activity:"Beartooth Highway (Alpine switchbacks & panoramas)",icon:"Mountain"},{time:"12:30-1:30 PM",activity:"Picnic lunch at the Pass or a mountain lake",icon:"Utensils"},{time:"1:30-4:00 PM",activity:"Descend switchbacks toward Red Lodge",icon:"Car"},{time:"4:00-7:00 PM",activity:"Red Lodge town evening exploration",icon:"Clock"},{time:"Evening",activity:"Dinner in Red Lodge (One of the best mountain towns)",icon:"Utensils"}], tips:"Check weather carefully; even in July, snow can fall on the Beartooth Pass." },
+      { day:13, date:"July 23", title:"Big Sky Montana", location:"Red Lodge → Glacier NP", route:"Red Lodge → Great Falls → St. Mary", mapUrl:"https://www.google.com/maps/dir/Red+Lodge,+MT/Great+Falls,+MT/St+Mary,+MT", highlights:["Montana Ranches","St. Mary Lake","Wild Goose Island"], focus:"The Great North Transition", drive:"7.5-8 hrs", lodging:{name:"St. Mary / Rising Sun Motor Inn", type:"Budget Motel", est:"$85–$105/night", note:"Inside Glacier's east side on St. Mary Lake; book months ahead—extremely limited supply"}, schedule:[{time:"7:00-8:00 AM",activity:"Relaxed breakfast in Red Lodge",icon:"Utensils"},{time:"8:00-11:30 AM",activity:"Drive Red Lodge to Great Falls",icon:"Car"},{time:"11:30-12:30 PM",activity:"Lunch & Supply stop in Great Falls",icon:"Utensils"},{time:"12:30-4:30 PM",activity:"Great Falls to Glacier East Side (Rocky Mtn Front)",icon:"Navigation"},{time:"4:30-6:30 PM",activity:"St. Mary Lake arrival & photography",icon:"Camera"},{time:"Sunset",activity:"Wild Goose Island Lookout (Iconic Glacier sunset)",icon:"Sunrise"}], tips:"Stock up on groceries in Great Falls; St. Mary has very limited and expensive services." },
+      { day:14, date:"July 24", title:"Going-to-the-Sun", location:"Glacier NP (Logan Pass)", route:"St. Mary → Logan Pass → Lake McDonald → Whitefish", mapUrl:"https://www.google.com/maps/dir/St+Mary,+MT/Logan+Pass+Visitor+Center,+MT/Lake+McDonald,+MT/Whitefish,+MT", highlights:["Logan Pass","Hidden Lake Overlook","Lake McDonald"], focus:"Engineering Marvels", drive:"3 hrs", lodging:{name:"Whitefish KOA Cabins", type:"Budget Cabin", est:"$75–$95/night", note:"Cozy cabin (not tent) option near Whitefish; pool and hot tub on-site. Alt: Pine Lodge ~$110"}, schedule:[{time:"5:30-6:00 AM",activity:"EARLY Departure for Logan Pass parking",icon:"Navigation"},{time:"6:00-9:00 AM",activity:"Logan Pass: Hidden Lake Overlook trail",icon:"Mountain"},{time:"9:00-12:30 PM",activity:"Sun Road Scenic Stops (Bird Woman Falls, Weeping Wall)",icon:"Camera"},{time:"12:30-2:00 PM",activity:"Lake McDonald lakeside relaxation & lunch",icon:"Clock"},{time:"2:00-4:00 PM",activity:"Apgar Village & West Glacier exploration",icon:"Navigation"},{time:"4:00-Evening",activity:"Drive to Whitefish for dinner & lodging",icon:"Car"}], tips:"Logan Pass parking is often full by 7:30 AM in late July. Don't be late!" },
+      { day:15, date:"July 25", title:"Glacier Buffer", location:"Many Glacier Area", route:"Whitefish → Many Glacier → Whitefish", mapUrl:"https://www.google.com/maps/dir/Whitefish,+MT/Many+Glacier,+MT/Whitefish,+MT", highlights:["Many Glacier Hotel","Swiftcurrent Lake","Grinnell Trail"], focus:"Flexibility & Wildlife", drive:"Variable", lodging:{name:"Pine Lodge, Whitefish (2nd night)", type:"Budget Hotel", est:"$100–$120/night", note:"Same base as Day 14. Alt: Swiftcurrent Motor Inn inside Many Glacier ~$110"}, schedule:[{time:"6:00-7:00 AM",activity:"Departure for Many Glacier (Highly scenic drive)",icon:"Car"},{time:"7:00-11:00 AM",activity:"Many Glacier exploration (Swiftcurrent Lake loop)",icon:"Mountain"},{time:"11:00-1:00 PM",activity:"Lunch at Many Glacier Hotel or picnic",icon:"Utensils"},{time:"1:00-4:00 PM",activity:"Flexible hiking or return toward Whitefish",icon:"Navigation"},{time:"Sunset",activity:"Whitefish Lake or Lake McDonald West Side",icon:"Sun"},{time:"Option",activity:"Polebridge Mercantile & North Fork (Optional choice)",icon:"Compass"}], tips:"Many Glacier is the 'Heart of Glacier'—the best chance for moose and bear sightings." },
+      { day:16, date:"July 26", title:"Lakeside Recovery", location:"Whitefish → Missoula", route:"Whitefish → Flathead Lake → Bigfork → Missoula", mapUrl:"https://www.google.com/maps/dir/Whitefish,+MT/Flathead+Lake,+MT/Bigfork,+MT/Missoula,+MT", highlights:["Flathead Lake","Bigfork","Missoula Downtown"], focus:"Relaxed Pacing", drive:"4 hrs", lodging:{name:"Motel 6 Missoula", type:"Budget Motel", est:"$70–$90/night", note:"Central location near the river. Alt: Bitterroot Hostel dorm ~$35/bunk"}, schedule:[{time:"7:30-9:00 AM",activity:"Slower morning in Whitefish",icon:"Utensils"},{time:"9:00-11:00 AM",activity:"Drive south to Flathead Lake (Mountain reflections)",icon:"Navigation"},{time:"11:00-1:00 PM",activity:"Lunch in Bigfork (Artistic mountain town)",icon:"Utensils"},{time:"1:00-3:30 PM",activity:"Scenic Flathead Lake drive (Western shore)",icon:"Car"},{time:"3:30-5:30 PM",activity:"Drive south to Missoula",icon:"Navigation"},{time:"5:30-8:00 PM",activity:"Missoula riverfront walk & brewery dinner",icon:"Clock"}], tips:"Flathead cherries are in season in July; stop at roadside stands along the lake." },
+      { day:17, date:"July 27", title:"Idaho's Hidden Gem", location:"Missoula → Stanley", route:"Missoula → US-93 → Lost Trail Pass → Salmon → ID-75 → Stanley", mapUrl:"https://www.google.com/maps/dir/Missoula,+MT/Lost+Trail+Pass,+MT/Salmon,+ID/Stanley,+ID", highlights:["Lost Trail Pass","Salmon River Drive","Sawtooth Peaks"], focus:"Remote Wilderness", drive:"6.5-7 hrs", lodging:{name:"Redfish Lake Lodge, Stanley", type:"Budget Lodge Room", est:"$90–$115/night", note:"Iconic lakeside lodge; book a basic room well in advance. Hot tub on-site after a long drive"}, schedule:[{time:"8:00-10:30 AM",activity:"Bitterroot Valley scenic drive (US-93)",icon:"Navigation"},{time:"10:30-12:00 PM",activity:"Lost Trail Pass crossing into Idaho",icon:"Mountain"},{time:"12:00-1:00 PM",activity:"Lunch in Salmon, ID",icon:"Utensils"},{time:"1:00-5:00 PM",activity:"Salmon River Scenic Drive to Stanley (Remote & scenic)",icon:"Car"},{time:"5:00-8:00 PM",activity:"Sawtooth Peaks appearance & Redfish Lake",icon:"Mountain"},{time:"Sunset",activity:"Stanley valley viewpoints",icon:"Sun"}], tips:"The drive from Salmon to Stanley is one of the most underrated stretches in the West." },
+      { day:18, date:"July 28", title:"Jagged Horizons", location:"Stanley → SLC", route:"Stanley → Sun Valley → Twin Falls → SLC", mapUrl:"https://www.google.com/maps/dir/Stanley,+ID/Sun+Valley,+ID/Shoshone+Falls,+ID/Salt+Lake+City,+UT", highlights:["Redfish Lake Sunrise","Sun Valley","Shoshone Falls"], focus:"Final Mountain Views", drive:"6.5-7 hrs", lodging:{name:"Motel 6 Salt Lake City", type:"Budget Motel", est:"$70–$90/night", note:"Practical airport-area base for final two nights. Alt: City Creek Inn ~$85"}, schedule:[{time:"6:00-7:30 AM",activity:"Sawtooth Sunrise at Redfish Lake",icon:"Sunrise"},{time:"8:30-11:30 AM",activity:"Scenic ID-75 south to Sun Valley",icon:"Car"},{time:"11:30-1:00 PM",activity:"Lunch in Ketchum/Sun Valley Area",icon:"Utensils"},{time:"1:00-3:00 PM",activity:"Twin Falls: Shoshone Falls (Niagara of the West)",icon:"Camera"},{time:"3:00-7:00 PM",activity:"Return drive to Salt Lake City",icon:"Navigation"},{time:"7:00-Evening",activity:"Farewell dinner in Salt Lake City",icon:"Utensils"}], tips:"Sun Valley/Ketchum offers a great upscale stop before the final transit push." },
+      { day:19, date:"July 29", title:"The Great Salt Finale", location:"Salt Lake City / Bonneville", route:"SLC → I-80 West → Bonneville Salt Flats → SLC", mapUrl:"https://www.google.com/maps/dir/Salt+Lake+City,+UT/Bonneville+Salt+Flats,+UT/Antelope+Island+State+Park,+UT/Salt+Lake+City,+UT", highlights:["Bonneville Salt Flats","Antelope Island","Salt Lake Sunset"], focus:"Surreal Environments", drive:"4 hrs", lodging:{name:"Motel 6 Salt Lake City (2nd night)", type:"Budget Motel", est:"$70–$90/night", note:"Same base as Day 18. Final full night—keep it simple for the 11:50 PM departure tomorrow"}, schedule:[{time:"8:00-10:00 AM",activity:"Sleep in & Repack morning",icon:"Clock"},{time:"10:00-12:00 PM",activity:"Drive to Bonneville Salt Flats (Surreal scenery)",icon:"Car"},{time:"12:00-4:00 PM",activity:"Bonneville Exploration & Photography",icon:"Camera"},{time:"4:00-6:00 PM",activity:"Return to Salt Lake City",icon:"Navigation"},{time:"6:00-Sunset",activity:"Final Sunset session at Antelope Island",icon:"Sun"},{time:"Option",activity:"Wasatch Mountain canyons if tired of driving",icon:"Compass"}], tips:"The Salt Flats are incredibly bright; high-quality sunglasses are a must." },
+      { day:20, date:"July 30", title:"Final Reflection", location:"SLC → Flight Home", route:"SLC → Temple Square → Airport", mapUrl:"https://www.google.com/maps/dir/Salt+Lake+City,+UT/Temple+Square,+UT/Salt+Lake+City+International+Airport,+UT", highlights:["Temple Square","Sugar House","Late Night Departure"], focus:"Repacking & Departure", drive:"Local", lodging:{name:"No lodging needed", type:"Late-Night Departure", est:"$0", note:"Flight DL2841 departs 11:50 PM — check out of hotel, store bags, explore until departure"}, schedule:[{time:"8:00-10:00 AM",activity:"Slow morning & final organization",icon:"Clock"},{time:"10:00-1:00 PM",activity:"Temple Square or Big Cottonwood Canyon walk",icon:"Mountain"},{time:"1:00-3:00 PM",activity:"Relaxed farewell lunch & café time",icon:"Utensils"},{time:"3:00-6:00 PM",activity:"Antelope Island bison viewing & sunset",icon:"CloudSun"},{time:"6:00-8:00 PM",activity:"Airport prep & final fuel/car return",icon:"Car"},{time:"11:50 PM",activity:"Flight DL2841 Departure to Detroit",icon:"Plane"}], tips:"Keep this day very simple; you'll be tired after 3,000+ miles of driving!" },
+    ];
+
+    const StatCard = ({ iconName, label, value, color }) => (
+      <div className="p-4 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center gap-4">
+        <div className={`p-3 rounded-xl ${color}`}>
+          <LucideIcon name={iconName} className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <p className="text-sm text-slate-500 font-medium leading-none mb-1">{label}</p>
+          <p className="text-lg font-bold text-slate-800">{value}</p>
+        </div>
+      </div>
+    );
+
+    const App = () => {
+      const [activeDay, setActiveDay] = useState(0);
+      const currentDay = ITINERARY_DATA[activeDay];
+      return (
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
+          <header className="bg-slate-900 text-white pt-12 pb-24 px-6 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10">
+              <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 L 20 20 L 40 80 L 60 10 L 80 90 L 100 0 L 100 100 Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div className="max-w-6xl mx-auto relative z-10">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="flex-1">
+                  <div className="inline-flex items-center gap-2 bg-amber-500 text-slate-900 px-3 py-1 rounded-full text-xs font-black mb-4 uppercase tracking-tighter">
+                    <LucideIcon name="Compass" className="w-3.5 h-3.5"/>Confirmed 2026 Itinerary
+                  </div>
+                  <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter italic">WESTERN GRAND LOOP</h1>
+                  <p className="text-slate-400 text-lg md:text-xl font-medium flex items-center gap-3">
+                    <LucideIcon name="Navigation" className="w-5 h-5 text-rose-500"/>UT • AZ • WY • MT • ID • UT
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-slate-500 text-xs font-black uppercase tracking-widest mb-1">Total Distance</p>
+                  <p className="text-2xl font-bold">~3,100 Miles</p>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main className="max-w-7xl mx-auto px-4 -mt-16">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <StatCard iconName="Calendar"  label="Duration"       value="20 Days"            color="bg-blue-600"/>
+              <StatCard iconName="Mountain"  label="National Parks" value="8 Major"            color="bg-emerald-600"/>
+              <StatCard iconName="Clock"     label="Daily Drive"    value={currentDay.drive}   color="bg-amber-600"/>
+              <StatCard iconName="Camera"    label="Photo Ops"      value="Infinite"           color="bg-rose-600"/>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-4 h-[750px] overflow-y-auto bg-white rounded-3xl shadow-xl border border-slate-200 p-4 custom-scrollbar">
+                <h3 className="text-lg font-black mb-4 px-2 flex items-center gap-2 uppercase tracking-tight text-slate-400">
+                  <LucideIcon name="Clock" className="w-5 h-5 text-blue-600"/>Day-by-Day Journey
+                </h3>
+                <div className="space-y-2">
+                  {ITINERARY_DATA.map((item, index) => (
+                    <button key={index} onClick={() => setActiveDay(index)}
+                      className={`w-full text-left p-4 rounded-2xl transition-all border-2 ${activeDay===index?'bg-slate-900 border-slate-900 shadow-lg translate-x-1':'bg-white border-transparent hover:bg-slate-50'}`}>
+                      <span className={`text-[10px] font-black uppercase tracking-tighter block mb-1 ${activeDay===index?'text-amber-400':'text-slate-400'}`}>
+                        Day {item.day} • {item.date}
+                      </span>
+                      <h4 className={`font-black text-sm uppercase tracking-tight leading-none ${activeDay===index?'text-white':'text-slate-700'}`}>{item.title}</h4>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-8 space-y-6">
+                <div className="bg-white rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden min-h-[750px] flex flex-col">
+                  <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-10">
+                      <LucideIcon name="Mountain" className="w-48 h-48"/>
+                    </div>
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-amber-400 font-black text-sm uppercase tracking-widest">Day {currentDay.day}</span>
+                        <div className="h-0.5 w-8 bg-amber-400/30"></div>
+                        <span className="text-slate-400 font-bold text-sm">{currentDay.date}, 2026</span>
+                      </div>
+                      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div className="flex-1">
+                          <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase italic">{currentDay.title}</h2>
+                          <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2 text-rose-400 font-bold">
+                              <LucideIcon name="MapPin" className="w-5 h-5"/>{currentDay.location}
+                            </div>
+                            <div className="flex items-center gap-2 text-slate-400 text-sm font-medium">
+                              <LucideIcon name="Navigation" className="w-4 h-4"/>{currentDay.route}
+                            </div>
+                          </div>
+                        </div>
+                        {currentDay.mapUrl && (
+                          <a href={currentDay.mapUrl} target="_blank" rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex-shrink-0">
+                            <LucideIcon name="ExternalLink" className="w-4 h-4"/>View Map
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-8 flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 bg-white">
+                    <div>
+                      <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                        <LucideIcon name="Camera" className="w-4 h-4 text-amber-500"/>Daily Highlights
+                      </h3>
+                      <div className="space-y-3">
+                        {currentDay.highlights.map((point, i) => (
+                          <div key={i} className="flex items-center gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100 transition-all hover:bg-white hover:border-amber-200 hover:shadow-md">
+                            <div className="w-2 h-2 rounded-full bg-amber-500 flex-shrink-0"/>
+                            <span className="font-bold text-slate-800 text-sm uppercase tracking-tight">{point}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                        <LucideIcon name="Clock" className="w-4 h-4 text-blue-500"/>Daily Schedule
+                      </h3>
+                      <div className="space-y-4 relative before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
+                        {currentDay.schedule.map((item, i) => (
+                          <div key={i} className="flex gap-4 relative">
+                            <div className="z-10 flex-shrink-0 w-8 h-8 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center">
+                              <LucideIcon name={item.icon} className="w-4 h-4 text-blue-600"/>
+                            </div>
+                            <div className="flex flex-col pt-1">
+                              <span className="text-[10px] font-black text-blue-500 uppercase tracking-tighter">{item.time}</span>
+                              <span className="text-sm font-bold text-slate-700 leading-snug">{item.activity}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {currentDay.lodging && (
+                    <div className="mx-8 mb-4 p-5 bg-emerald-50 border border-emerald-200 rounded-3xl flex items-start gap-5">
+                      <div className="p-3 bg-emerald-600 rounded-2xl flex-shrink-0">
+                        <LucideIcon name="BedDouble" className="w-6 h-6 text-white"/>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h4 className="font-black uppercase tracking-widest text-xs text-emerald-700">Budget Lodging</h4>
+                          <span className="text-[10px] font-black uppercase tracking-tight bg-emerald-600 text-white px-2 py-0.5 rounded-full">{currentDay.lodging.type}</span>
+                          <span className="text-[10px] font-black uppercase tracking-tight bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">{currentDay.lodging.est}</span>
+                        </div>
+                        <p className="font-black text-sm text-emerald-900 mb-1">{currentDay.lodging.name}</p>
+                        <p className="text-xs text-emerald-700 font-medium leading-relaxed">{currentDay.lodging.note}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mx-8 mb-8 p-6 bg-slate-900 text-white rounded-3xl flex items-start gap-5 border border-white/5 shadow-xl">
+                    <div className="p-3 bg-amber-500 rounded-2xl flex-shrink-0">
+                      <LucideIcon name="Info" className="w-6 h-6 text-slate-900"/>
+                    </div>
+                    <div>
+                      <h4 className="font-black uppercase tracking-widest text-xs text-amber-400 mb-1">Strategic Advice</h4>
+                      <p className="text-slate-300 text-sm font-medium leading-relaxed italic">"{currentDay.tips}"</p>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
+                    <button disabled={activeDay===0} onClick={()=>setActiveDay(p=>p-1)}
+                      className="px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest text-slate-500 hover:bg-white hover:text-blue-600 disabled:opacity-30 transition-all">
+                      ← Previous Day
+                    </button>
+                    <div className="flex gap-1 items-center">
+                      {ITINERARY_DATA.map((_,i)=>(
+                        <div key={i} className={`h-1.5 rounded-full transition-all ${activeDay===i?'w-6 bg-blue-600':'w-1.5 bg-slate-200'}`}/>
+                      ))}
+                    </div>
+                    <button disabled={activeDay===ITINERARY_DATA.length-1} onClick={()=>setActiveDay(p=>p+1)}
+                      className="px-8 py-3 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-widest hover:bg-blue-600 shadow-lg disabled:opacity-30 transition-all">
+                      Next Day →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+
+          <footer className="mt-12 text-center">
+            <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
+              <LucideIcon name="Plane" className="w-4 h-4 text-blue-600"/>
+              <span className="text-xs font-black uppercase tracking-tighter text-slate-500">
+                Flight Home: DL2841 • July 30, 2026 • 11:50 PM Departure
+              </span>
+            </div>
+          </footer>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>
